@@ -1,0 +1,85 @@
+body {
+    background-color: black;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+button {
+    background-color: #3EB489;
+    color: white;
+    padding: .5em;
+    border-radius: 5px;
+    font-weight: bold;
+    font-family: 'Sen', sans-serif;
+    margin: .5em 0;
+}
+
+input {
+    padding: .5em;
+    font-family: 'Sen', sans-serif;
+}
+
+header {
+    display: flex;
+    height: 15vh;
+    justify-content: center;
+    margin: auto;
+}
+
+main {
+    height: 75vh;
+    width: 75vw;
+    display: flex;
+    justify-content: space-around;
+    margin: auto;
+    border: 2px, solid, white;
+}
+
+footer {
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #35374d
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.task-container{
+    padding: 0 .5em;
+    border: .5px solid#3EB489;
+    margin : .5em 0;
+    border-radius: 10px;
+}
+
+.task-categories{
+    display: flex;
+    justify-content: flex-start;
+    padding-bottom: .5em;
+}
+
+.category-container{
+    padding: 0 .5em;
+    margin : .5em 0;
+    border-radius: 10px;
+}
+
+ul div p {
+    margin-right: .5em;
+}
+
+ul div span {
+    margin: 0 .25em;
+}
