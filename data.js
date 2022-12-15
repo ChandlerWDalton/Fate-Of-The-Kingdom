@@ -1,4 +1,5 @@
 //UI Config
+const visualDiv = document.querySelector('#visual')
 const textDiv = document.querySelector('#text');
 const actionsDiv = document.querySelector('#actions');
 const statsDiv = document.querySelector('#stats');
@@ -27,6 +28,7 @@ const monsterEncounter = {
         {
             itemName: 'goblin',
             monsterHealth: 5,
+            image: '/images/goblin.jpeg',
             affects: 'health',
             affectAmount: -2,
             choice: 'Charge!'
@@ -34,6 +36,7 @@ const monsterEncounter = {
         {
             itemName: 'stone golem',
             monsterHealth: 10,
+            image: '/images/golem.jpeg',
             affects: 'health',
             affectAmount: -5,
             choice: 'Charge!'
@@ -41,6 +44,7 @@ const monsterEncounter = {
         {
             itemName: 'hellhound',
             monsterHealth: 5,
+            image: '/images/hellhound.jpg',
             affects: 'health',
             affectAmount: -3,
             choice: 'Charge!'
@@ -56,6 +60,7 @@ const chestEncounters = {
         {
             itemName: 'gold embossed scroll',
             affects: 'power',
+            image: '/images/chest.jpeg',
             affectAmount: -2,
             text: 'After reading the contets, you hear a cackle, and you feel a bit weaker',
             choice: 'Read it?',
@@ -63,6 +68,7 @@ const chestEncounters = {
         {
             itemName: 'skull ring',
             affects: 'power',
+            image: '/images/skullring.jpeg',
             affectAmount: -1,
             text: 'It clutches to your finger, unable to remove it, it drains a bit of your strength',
             choice: 'Put it on?',
@@ -70,6 +76,7 @@ const chestEncounters = {
         {
             itemName: 'old Spell Book',
             affects: 'power',
+            image: '/images/spellbook.jpeg',
             affectAmount: 5,
             text: 'After reading the book, your sword glows with light. It feels lighter, stronger.',
             choice: 'Read it?',
@@ -77,6 +84,7 @@ const chestEncounters = {
         {
             itemName: 'blackened sword',
             affects: 'power',
+            image: '/images/blacksword.jpeg',
             affectAmount: 10,
             text: `You've found a legendary sword, forged by most skilled dwarves, blessed by the highest elves. It's power is unmatched.`,
             choice: 'Pick it up?',
@@ -92,12 +100,14 @@ const tavernEncounter = {
             itemName: 'hearty  beer',
             affects: 'health',
             affectAmount: 2,
+            image: '/images/tavern.jpeg',
             text: 'Mmm delicious',
             choice: 'Drink it?',
         },
         {
             itemName: 'golden drink',
             affects: 'health',
+            image: '/images/tavern.jpeg',
             affectAmount: 15,
             text: `You've stumbled upon an elixer of the Gods. Lucky you`,
             choice: 'Drink it?',
@@ -105,6 +115,7 @@ const tavernEncounter = {
         {
             itemName: 'goats milk.',
             affects: 'health',
+            image: '/images/tavern.jpeg',
             affectAmount: -1,
             text: `It's gone bad unfortunately`,
             choice: 'Drink it?',
@@ -113,6 +124,7 @@ const tavernEncounter = {
             itemName: 'fresh water',
             affects: 'health',
             affectAmount: 1,
+            image: '/images/tavern.jpeg',
             text: `You feel refreshed`,
             choice: 'Drink it?',
         },
@@ -120,6 +132,7 @@ const tavernEncounter = {
             itemName: 'ham',
             affects: 'health',
             affectAmount: 3,
+            image: '/images/tavern.jpeg',
             text: `It's...A ham.`,
             choice: 'Eat it?',
         },
@@ -127,6 +140,7 @@ const tavernEncounter = {
             itemName: 'glowing potion',
             affects: 'health',
             affectAmount: -2,
+            image: '/images/tavern.jpeg',
             text: `An unhelpful witch has created this.`,
             choice: 'Drink it?',
         }
@@ -139,6 +153,7 @@ const finalEncounter = {
     encounters : [
         {
             itemName: 'The Horned Skull King',
+            image: '/images/boss.jpg',
             monsterHealth: 25
         }
     ]
@@ -151,7 +166,37 @@ let curEncounter;
 let curEncounterItem;
 
 startButton.onclick = () => {
-    gameId = Math.floor(100000 + Math.random() * 900000);;
+    visualDiv.innerHTML = '';
+    let knight1 = document.createElement('img');
+    knight1.setAttribute('src', '/images/knight.jpeg')
+    knight1.setAttribute('class', 'avatar');
+    let knight2 = document.createElement('img')
+    knight2.setAttribute('src', '/images/knight2.jpeg')
+    knight2.setAttribute('class', 'avatar');
+    visualDiv.appendChild(knight1);
+    visualDiv.appendChild(knight2);
+
+    setText('Choose your hero');
+
+    actionsDiv.innerHTML = '';
+    let idInput = document.createElement('input');
+    idInput.setAttribute('type', 'text');
+    idInput.setAttribute('id', 'heroName');
+    idInput.setAttribute('placeholder', `Enter Hero's Name`)
+    let submitButton = document.createElement('button');
+    submitButton.innerText = 'Submit'
+    submitButton.setAttribute('onclick', `createGame()`);
+    actionsDiv.appendChild(idInput);
+    actionsDiv.appendChild(submitButton);
+
+}
+
+async function createGame(){
+    user.name = document.querySelector('#heroName').value;
+    if(user.sprite === ''){
+        user.sprite = '/images/knight.jpeg'
+    }
+    gameId = Math.floor(100000 + Math.random() * 900000);
     renderUserData();
     continueJourney();
 }
@@ -177,19 +222,21 @@ async function resumeGame(){
 
 async function continueJourney(){
     progress++;
-    showSave();
+    // showSave();
     renderUserData();
     if(progress < 15){
         curEncounter = {...possibleEncounters[Math.floor(Math.random()*possibleEncounters.length)]};
         curEncounterItem = {...curEncounter.encounters[Math.floor(Math.random()*curEncounter.encounters.length)]};
         setText(curEncounter.text, curEncounterItem);
         setActions(curEncounterItem.choice);
+        setImage();
     } else {
         progress++;
         curEncounter = {...finalEncounter};
         curEncounterItem = {...finalEncounter.encounters[0]}
         setText(curEncounter.text);
         setActions('Charge!')
+        setImage();
     }
 }
 
@@ -217,6 +264,13 @@ function setActions(text){
 
 }
 
+function setImage(){
+    visualDiv.innerHTML = ''
+    let newImage = document.createElement('img');
+    newImage.setAttribute('src', curEncounterItem.image)
+    visualDiv.appendChild(newImage);
+}
+
 function confirmAction(){
     actionsDiv.innerHTML = ''
     if(curEncounter.id === 'monster'){
@@ -226,10 +280,14 @@ function confirmAction(){
             setText(`The ${curEncounterItem.itemName} was a bit strong for you. You got away with a bit of damage.`)
         } else {
             setText(`The ${curEncounterItem.itemName} was no match for you`);
-
         }
-        renderUserData();
-        setTimeout(function() {  continueJourney(); }, 5000);
+        if(user.health <= 0 || user.power <= 0){
+            userDied();
+        } else {
+            renderUserData();
+            setTimeout(function() {  continueJourney(); }, 5000);
+        }
+
     } else if(curEncounter.id === 'final'){
         if(user.power < curEncounterItem.monsterHealth){
             setText(`You fall to the foul king's blade. You look down upon the kingdom you weren't able to save...`)
@@ -239,9 +297,15 @@ function confirmAction(){
     } else {
         user[curEncounterItem.affects] = user[curEncounterItem.affects] + curEncounterItem.affectAmount;
         setText(curEncounterItem.text);
-        renderUserData();
-        setTimeout(function() {  continueJourney(); }, 5000);
+        if(user.health <= 0 || user.power <= 0){
+            userDied();
+        } else {
+            renderUserData();
+            setTimeout(function() {  continueJourney(); }, 5000);
+        }
     }
+
+    
 
 
 }
@@ -253,14 +317,20 @@ function declineAction(){
 }
     
 function renderUserData(){
-
     statsDiv.innerHTML = '';
+    let sprite = document.createElement('img')
+    sprite.setAttribute('src', user.sprite)
+    sprite.setAttribute('class', 'avatar');
+    let name = document.createElement('p')
+    name.innerText = user.name;
     let health = document.createElement('p');
     health.innerText = 'Health: ' + user.health;
     let power = document.createElement('p');
     power.innerText = 'Power: ' + user.power;
     let step = document.createElement('p');
-    step.innerText = progress + '/15'
+    step.innerText = 'Journey Progress: ' + progress + '/15'
+    statsDiv.appendChild(sprite)
+    statsDiv.appendChild(name);
     statsDiv.appendChild(health);
     statsDiv.appendChild(power);
     statsDiv.appendChild(step)
@@ -275,6 +345,13 @@ function showSave(){
     saveButton.setAttribute('onclick', 'saveGame()');
     saveDiv.appendChild(idLabel);
     saveDiv.appendChild(saveButton);
+}
+
+function userDied(){
+    setText('You have died...');
+    renderUserData();
+    saveDiv.innerHTML = '';
+    deleteGame();
 }
 
 async function saveGame(){
@@ -297,8 +374,18 @@ async function getGame(){
     await fetch(`/.netlify/functions/get-game/?id=${gameId}`)
     .then(res => res.json())
     .then(data => {
-        gameId = data.gameId,
-        progress = data.progress - 1,
-        user = data.user
+        if(data.gameId){
+            gameId = data.gameId,
+            progress = data.progress - 1,
+            user = data.user
+        }
+    })
+}
+
+async function deleteGame(){
+    await fetch(`/.netlify/functions/delete-game/?id=${gameId}`)
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
     })
 }

@@ -28,13 +28,39 @@ header {
 }
 
 main {
-    height: 75vh;
-    width: 75vw;
+    height: 70vh;
+    width: 60vw;
     display: flex;
     justify-content: space-around;
     margin: auto;
-    border: 2px, solid, white;
 }
+
+#main-display{
+    display: flex;
+}
+
+#game-controls {
+    border-radius: 2em;
+    border-color: white;
+    border-style: solid;
+    border-width: 2px;
+    padding: 2em;
+    width: 40vw;
+}
+
+.avatar{
+    border-radius: 2em;
+    border-color: white;
+    border-style: solid;
+    border-width: 2px;
+    padding: 1em;
+}
+
+img {
+    width: 20em;
+}
+
+
 
 footer {
     height: 10vh;
@@ -42,44 +68,4 @@ footer {
     align-items: center;
     justify-content: center;
     background-color: #35374d
-}
-
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-
-ul div {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-}
-
-.task-container{
-    padding: 0 .5em;
-    border: .5px solid#3EB489;
-    margin : .5em 0;
-    border-radius: 10px;
-}
-
-.task-categories{
-    display: flex;
-    justify-content: flex-start;
-    padding-bottom: .5em;
-}
-
-.category-container{
-    padding: 0 .5em;
-    margin : .5em 0;
-    border-radius: 10px;
-}
-
-ul div p {
-    margin-right: .5em;
-}
-
-ul div span {
-    margin: 0 .25em;
 }
