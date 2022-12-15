@@ -298,7 +298,7 @@ async function getGame(){
     .then(res => res.json())
     .then(data => {
         gameId = data.gameId,
-        progress = data.progress,
+        progress = data.progress - 1,
         user = data.user
     })
 }
