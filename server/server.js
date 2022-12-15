@@ -1,4 +1,4 @@
-const Game = require('./game');
+const Game = require('../game');
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
