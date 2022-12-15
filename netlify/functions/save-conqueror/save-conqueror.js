@@ -16,10 +16,9 @@ let Conqueror = models.conqueror || model("conqueror", ConquerorSchema);
 
 const handler = async function (event) {
     const eventBody = JSON.parse(event.body);
-    const user = eventBody.user;
-    if(user){
+    if(eventBody.user){
         const conqueror = new Conqueror({
-            ...eventBody.user
+            user: eventBody.user
         })
         await conqueror.save()
         return {

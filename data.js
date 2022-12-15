@@ -23,7 +23,6 @@ let progress = 0;
 const monsterEncounter = {
     id: 'monster',
     text: 'You come around the corner and see a shadow. It appears to be a ',
-    choice: 'Engage?',
     encounters:  [
         {
             itemName: 'goblin',
@@ -315,6 +314,7 @@ function confirmAction(){
             setText(`You fall to the foul king's blade. With your last bit of energy you look upon the kingdom you were unable to save...`)
         } else {
             setText(`You fight for the lives of the kingdom. You strike hard and fast. The foul king falls to his knees and with one final slash you end him.  You have finally brought peace to the land.`)
+            saveConqueror();
         }
         actionsDiv.innerHTML = '';
         let retry = document.createElement('a')
@@ -333,9 +333,6 @@ function confirmAction(){
             setTimeout(function() {  continueJourney(); }, 3000);
         }
     }
-
-    
-
 
 }
 
@@ -413,6 +410,25 @@ async function saveGame(){
         saveDiv.appendChild(saveMessage);})
         setTimeout(function() {  showSave(); }, 3000);
 }
+
+async function saveConqueror(){
+    await fetch('/.netlify/functions/save-conqueror/', {
+        method: 'POST',
+        body: JSON.stringify({user}),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(res => res.json())
+    .then(data => {
+        let view = document.createElement('a')
+        view.setAttribute('href', 'conquerors.html')
+        let button = document.createElement('button')
+        button.innerText = 'View Conquerors';
+        view.appendChild(button);
+        actionsDiv.appendChild(view);
+    })
+}
+
 
 async function getGame(){
     await fetch(`/.netlify/functions/get-game/?id=${gameId}`)
