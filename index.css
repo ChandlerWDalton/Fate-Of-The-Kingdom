@@ -1,23 +1,45 @@
+#navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #661919;
+    height: 15vh;
+    position: fixed;
+    width: 100%;
+    font-family: 'EB Garamond', serif;
+}
+
+    #navbar a {
+        padding-left: 1em;
+        padding-right: 1em;
+        color: white;
+        text-decoration: none;
+    }
+
 body {
     background-color: black;
+    display: flex;
+    flex-direction: column;
     color: white;
     margin: 0;
     padding: 0;
 }
 
 button {
-    background-color: #3EB489;
+    background-color: #b88b37;
     color: white;
     padding: .5em;
+    margin: .5em;
     border-radius: 5px;
     font-weight: bold;
-    font-family: 'Sen', sans-serif;
+    font-family: 'EB Garamond', serif;
     margin: .5em 0;
+    cursor: pointer;
 }
 
 input {
     padding: .5em;
-    font-family: 'Sen', sans-serif;
+    font-family: 'EB Garamond', serif;
 }
 
 header {
@@ -28,7 +50,7 @@ header {
 }
 
 main {
-    height: 70vh;
+    height: 75vh;
     width: 60vw;
     display: flex;
     justify-content: space-around;
@@ -37,6 +59,18 @@ main {
 
 #main-display{
     display: flex;
+    padding: 2em;
+    font-family: 'EB Garamond', serif;
+}
+
+#story{
+    padding: 2em;
+    width: 50vw;
+    font-family: 'EB Garamond', serif;
+}
+
+#story p {
+    font-size: large;
 }
 
 #game-controls {
@@ -48,12 +82,59 @@ main {
     width: 40vw;
 }
 
+#visual {
+    display: flex;
+    justify-content: space-around;
+}
+
+#text {
+    padding: 2em;
+    display: flex;
+    justify-content: center;
+    background-color: #661919;
+    margin-top: 1em;
+}
+
+#actions {
+    padding: 2em;
+    display: flex;
+    justify-content: center;
+    background-color: #661919;
+}
+
+#stats {
+    border-radius: 2em;
+    border-color: white;
+    border-style: solid;
+    border-width: 2px;
+    padding: 2em;
+    max-width: 15vw;
+}
+
+#stats img {
+    width: 15vw;
+}
+
+#save {
+    border-radius: 2em;
+    border-color: white;
+    border-style: solid;
+    border-width: 2px;
+    padding: 2em;
+    max-width: 15vw;
+}
+
 .avatar{
     border-radius: 2em;
     border-color: white;
     border-style: solid;
     border-width: 2px;
     padding: 1em;
+    cursor: pointer;
+}
+
+.active{
+    background-color: white;
 }
 
 img {
@@ -67,5 +148,6 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #35374d
+    background-color: #661919;
+    font-family: 'EB Garamond', serif;
 }

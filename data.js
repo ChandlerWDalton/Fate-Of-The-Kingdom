@@ -170,9 +170,13 @@ startButton.onclick = () => {
     let knight1 = document.createElement('img');
     knight1.setAttribute('src', '/images/knight.jpeg')
     knight1.setAttribute('class', 'avatar');
+    knight1.setAttribute('id', 'knight')
+    knight1.setAttribute('onclick', `setSprite('knight')`);
     let knight2 = document.createElement('img')
     knight2.setAttribute('src', '/images/knight2.jpeg')
     knight2.setAttribute('class', 'avatar');
+    knight2.setAttribute('id', 'knight2');
+    knight2.setAttribute('onclick', `setSprite('knight2')`);
     visualDiv.appendChild(knight1);
     visualDiv.appendChild(knight2);
 
@@ -189,6 +193,23 @@ startButton.onclick = () => {
     actionsDiv.appendChild(idInput);
     actionsDiv.appendChild(submitButton);
 
+}
+
+function setSprite(option){
+    user.sprite = `/images/${option}.jpeg`
+    if(option === 'knight'){
+        let active = document.querySelector(`#knight`);
+        active.setAttribute('class', 'avatar active');
+
+        let notActive = document.querySelector(`#knight2`);
+        notActive.setAttribute('class', 'avatar');
+    } else {
+        let active = document.querySelector(`#knight2`);
+        active.setAttribute('class', 'avatar active');
+
+        let notActive = document.querySelector(`#knight`);
+        notActive.setAttribute('class', 'avatar');
+    }
 }
 
 async function createGame(){
@@ -222,7 +243,7 @@ async function resumeGame(){
 
 async function continueJourney(){
     progress++;
-    // showSave();
+    showSave();
     renderUserData();
     if(progress < 15){
         curEncounter = {...possibleEncounters[Math.floor(Math.random()*possibleEncounters.length)]};
@@ -320,7 +341,6 @@ function renderUserData(){
     statsDiv.innerHTML = '';
     let sprite = document.createElement('img')
     sprite.setAttribute('src', user.sprite)
-    sprite.setAttribute('class', 'avatar');
     let name = document.createElement('p')
     name.innerText = user.name;
     let health = document.createElement('p');
@@ -339,7 +359,7 @@ function renderUserData(){
 function showSave(){
     saveDiv.innerHTML = '';
     let idLabel = document.createElement('p');
-    idLabel.innerText = 'Please note down this Id to resume game: ' + gameId;
+    idLabel.innerText = 'Please note down this id to resume game: ' + gameId;
     let saveButton = document.createElement('button');
     saveButton.innerText = 'Save Game';
     saveButton.setAttribute('onclick', 'saveGame()');
