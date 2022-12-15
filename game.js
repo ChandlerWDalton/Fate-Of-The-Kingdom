@@ -2,11 +2,8 @@ const {model, Schema} = require('mongoose');
 
 const Game = new Schema({
     id: String,
-    userName: String,
-    userHealth: String,
-    userPower: String,
-    progress: Number,
-    inventory: Array
+    user: Object,
+    progress: Number
 });
 
 module.exports = model('game', Game);

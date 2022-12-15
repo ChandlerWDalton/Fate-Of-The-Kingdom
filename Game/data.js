@@ -3,17 +3,20 @@ const textDiv = document.querySelector('#text');
 const actionsDiv = document.querySelector('#actions');
 const statsDiv = document.querySelector('#stats');
 const startButton = document.querySelector('#start');
+const resumeButton = document.querySelector('#resume');
 
 //Data
 const user = {
     name: '',
     sprite: '',
-    health: 20,
+    health: 5,
     power: 1,
     storage: []
 }
 
-let stepCount = 0;
+let id = ''
+
+let progress = 0;
 
 const monsterEncounter = {
     id: 'monster',
@@ -151,16 +154,35 @@ startButton.onclick = () => {
     continueJourney();
 }
 
+resumeButton.onclick = () => {
+    actionsDiv.innerHTML = '';
+    let idInput = document.createElement('input');
+    idInput.setAttribute('type', 'text');
+    idInput.setAttribute('id', 'resumeInput');
+    idInput.setAttribute('placeholder', 'Game Id')
+    let submitButton = document.createElement('button');
+    submitButton.innerText = 'Resume'
+    submitButton.setAttribute('onclick', `resumeGame()`);
+    actionsDiv.appendChild(idInput);
+    actionsDiv.appendChild(submitButton);
+}
+
+async function resumeGame(){
+    id = document.querySelector('#resumeInput').value;
+    await getGame();
+    continueJourney();
+}
+
 async function continueJourney(){
-    stepCount++;
+    progress++;
     renderUserData();
-    if(stepCount < 15){
+    if(progress < 15){
         curEncounter = {...possibleEncounters[Math.floor(Math.random()*possibleEncounters.length)]};
         curEncounterItem = {...curEncounter.encounters[Math.floor(Math.random()*curEncounter.encounters.length)]};
         setText(curEncounter.text, curEncounterItem);
         setActions(curEncounterItem.choice);
     } else {
-        stepCount++;
+        progress++;
         curEncounter = {...finalEncounter};
         curEncounterItem = {...finalEncounter.encounters[0]}
         setText(curEncounter.text);
@@ -235,8 +257,29 @@ function renderUserData(){
     let power = document.createElement('p');
     power.innerText = 'Power: ' + user.power;
     let step = document.createElement('p');
-    step.innerText = stepCount + '/15'
+    step.innerText = progress + '/15'
     statsDiv.appendChild(health);
     statsDiv.appendChild(power);
     statsDiv.appendChild(step)
+}
+
+async function saveGame(id){
+    const game = {
+        id,
+        user,
+        prog
+    }
+    await fetch('/game', {
+        method: 'POST',
+        body: JSON.stringify({game}),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(res => res.json())
+    .then(data => console.log(data))
+}
+
+async function getGame(){
+    await fetch(`/todos/${id}`).then(res => res.json())
+    .then(data => console.log(data));
 }
