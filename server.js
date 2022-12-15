@@ -22,8 +22,8 @@ app.use(bodyParser.json());
 
 app.get('/game/:id', async (req, res) => {
     if(req.params.id){
-       const id = req.params.id
-       let game = await Game.findOne({id});
+       const gameId = req.params.id
+       let game = await Game.findOne({gameId});
        if (game){
         res.status(200).send(game);
        } else {
@@ -36,14 +36,25 @@ app.get('/game/:id', async (req, res) => {
 
 app.post('/game', async (req, res) => {
     if(req.body.game){
-        const game = new Game({
-            ...req.body.game
-        })
-        await game.save().then(doc => {
-            console.log('new game saved to DB');
-            console.log(doc)
-        })
-        res.status(200).send('Save Complete')
+        const gameId = req.body.game.gameId;
+        let game = await Game.findOne({gameId});
+        if(game){
+            game.gameId = req.body.game.gameId
+            game.user = req.body.game.user
+            game.progress = req.body.game.progress
+            await game.save()
+            res.status(200).send('Save Complete')
+        } else {
+            const game = new Game({
+                ...req.body.game
+            })
+            await game.save().then(doc => {
+                console.log('new game saved to DB');
+                console.log(doc)
+            })
+            res.status(200).send('Save Complete')
+        }
+        
     } else {
         res.status(403).send({msg: 'Request Body must contain a valid game object'})
     }

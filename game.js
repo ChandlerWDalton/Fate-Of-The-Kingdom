@@ -1,7 +1,7 @@
 const {model, Schema} = require('mongoose');
 
 const Game = new Schema({
-    id: String,
+    gameId: String,
     user: Object,
     progress: Number
 });

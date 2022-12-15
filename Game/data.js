@@ -2,11 +2,12 @@
 const textDiv = document.querySelector('#text');
 const actionsDiv = document.querySelector('#actions');
 const statsDiv = document.querySelector('#stats');
+const saveDiv = document.querySelector('#save');
 const startButton = document.querySelector('#start');
 const resumeButton = document.querySelector('#resume');
 
 //Data
-const user = {
+let user = {
     name: '',
     sprite: '',
     health: 5,
@@ -14,7 +15,7 @@ const user = {
     storage: []
 }
 
-let id = ''
+let gameId = ''
 
 let progress = 0;
 
@@ -150,6 +151,7 @@ let curEncounter;
 let curEncounterItem;
 
 startButton.onclick = () => {
+    gameId = Math.floor(100000 + Math.random() * 900000);;
     renderUserData();
     continueJourney();
 }
@@ -168,13 +170,14 @@ resumeButton.onclick = () => {
 }
 
 async function resumeGame(){
-    id = document.querySelector('#resumeInput').value;
+    gameId = document.querySelector('#resumeInput').value;
     await getGame();
     continueJourney();
 }
 
 async function continueJourney(){
     progress++;
+    showSave();
     renderUserData();
     if(progress < 15){
         curEncounter = {...possibleEncounters[Math.floor(Math.random()*possibleEncounters.length)]};
@@ -263,11 +266,22 @@ function renderUserData(){
     statsDiv.appendChild(step)
 }
 
-async function saveGame(id){
+function showSave(){
+    saveDiv.innerHTML = '';
+    let idLabel = document.createElement('p');
+    idLabel.innerText = 'Please note down this Id to resume game: ' + gameId;
+    let saveButton = document.createElement('button');
+    saveButton.innerText = 'Save Game';
+    saveButton.setAttribute('onclick', 'saveGame()');
+    saveDiv.appendChild(idLabel);
+    saveDiv.appendChild(saveButton);
+}
+
+async function saveGame(){
     const game = {
-        id,
+        gameId,
         user,
-        prog
+        progress
     }
     await fetch('/game', {
         method: 'POST',
@@ -280,6 +294,10 @@ async function saveGame(id){
 }
 
 async function getGame(){
-    await fetch(`/todos/${id}`).then(res => res.json())
-    .then(data => console.log(data));
+    await fetch(`/game/${gameId}`).then(res => res.json())
+    .then(data => {
+        gameId = data.gameId;
+        progress = data.progress - 1;
+        user = data.user;
+    });
 }
