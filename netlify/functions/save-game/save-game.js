@@ -25,23 +25,25 @@ const handler = async function (event, context) {
             game.gameId = eventBody.game.gameId
             game.user = eventBody.game.user
             game.progress = eventBody.game.progress
-            await game.save()
-            return {
-                statusCode: 200,
-                msg: 'Save Complete'
+            await game.save().then(e => {
+                return {
+                    statusCode: 200,
+                    msg: 'Save Complete'
+                }
             }
+                
+            )
+            
         } else {
             const game = new Game({
                 ...eventBody.game
             })
             await game.save().then(doc => {
-                console.log('new game saved to DB');
-                console.log(doc)
+                return {
+                    statusCode: 200,
+                    msg: 'Save Complete'
+                }
             })
-            return {
-                statusCode: 200,
-                msg: 'Save Complete'
-            }
         }
     } else {
         return {
