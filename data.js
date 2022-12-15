@@ -283,21 +283,21 @@ async function saveGame(){
         user,
         progress
     }
-    await fetch('/game', {
+    await fetch('/.netlify/functions/save-game/', {
         method: 'POST',
         body: JSON.stringify({game}),
         headers: {
             'Content-Type': 'application/json'
         }
-    }).then(res => res.json())
-    .then(data => console.log(data))
+    }).then(res => console.log(res.json()));
+    // .then(data => console.log(data))
 }
 
 async function getGame(){
-    await fetch(`/game/${gameId}`).then(res => res.json())
-    .then(data => {
-        gameId = data.gameId;
-        progress = data.progress - 1;
-        user = data.user;
-    });
+    await fetch(`/.netlify/functions/get-game/?id=${gameId}`).then(res => console.log(res.json()))
+    // .then(data => {
+    //     gameId = data.gameId;
+    //     progress = data.progress - 1;
+    //     user = data.user;
+    // });
 }
