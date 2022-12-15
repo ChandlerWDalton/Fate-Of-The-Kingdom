@@ -17,7 +17,7 @@ mongoose.connect(
 .catch(console.error);
 
 
-app.use(express.static('game'))
+app.use(express.static('Game'))
 app.use(bodyParser.json());
 
 app.get('/game/:id', async (req, res) => {
