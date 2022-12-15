@@ -149,7 +149,7 @@ const tavernEncounter = {
 
 const finalEncounter = {
     id: 'final',
-    text: `You've made it to castle alive. You enter the courtyard and there he stands. The Horned Skull King. You raise your sword.`,
+    text: `You've made it to the castle alive. You enter the courtyard and there he stands. The Horned Skull King. You raise your sword.`,
     encounters : [
         {
             itemName: 'The Horned Skull King',
@@ -250,14 +250,14 @@ async function continueJourney(){
         curEncounterItem = {...curEncounter.encounters[Math.floor(Math.random()*curEncounter.encounters.length)]};
         setText(curEncounter.text, curEncounterItem);
         setActions(curEncounterItem.choice);
-        setImage();
+        setImage(curEncounterItem.image);
     } else {
         progress++;
         curEncounter = {...finalEncounter};
         curEncounterItem = {...finalEncounter.encounters[0]}
         setText(curEncounter.text);
         setActions('Charge!')
-        setImage();
+        setImage(curEncounterItem.image);
     }
 }
 
@@ -285,10 +285,10 @@ function setActions(text){
 
 }
 
-function setImage(){
+function setImage(image){
     visualDiv.innerHTML = ''
     let newImage = document.createElement('img');
-    newImage.setAttribute('src', curEncounterItem.image)
+    newImage.setAttribute('src', image)
     visualDiv.appendChild(newImage);
 }
 
@@ -303,18 +303,26 @@ function confirmAction(){
             setText(`The ${curEncounterItem.itemName} was no match for you`);
         }
         if(user.health <= 0 || user.power <= 0){
-            userDied();
+            setTimeout(function() {  userDied(); }, 3000);
         } else {
             renderUserData();
-            setTimeout(function() {  continueJourney(); }, 5000);
+            setTimeout(function() {  continueJourney(); }, 3000);
         }
 
     } else if(curEncounter.id === 'final'){
+        setImage('/images/final.jpg')
         if(user.power < curEncounterItem.monsterHealth){
-            setText(`You fall to the foul king's blade. You look down upon the kingdom you weren't able to save...`)
+            setText(`You fall to the foul king's blade. With your last bit of energy you look upon the kingdom you were unable to save...`)
         } else {
             setText(`You fight for the lives of the kingdom. You strike hard and fast. The foul king falls to his knees and with one final slash you end him.  You have finally brought peace to the land.`)
         }
+        actionsDiv.innerHTML = '';
+        let retry = document.createElement('a')
+        retry.setAttribute('href', 'index.html')
+        let button = document.createElement('button')
+        button.innerText = 'New Adventure';
+        retry.appendChild(button);
+        actionsDiv.appendChild(retry);
     } else {
         user[curEncounterItem.affects] = user[curEncounterItem.affects] + curEncounterItem.affectAmount;
         setText(curEncounterItem.text);
@@ -322,7 +330,7 @@ function confirmAction(){
             userDied();
         } else {
             renderUserData();
-            setTimeout(function() {  continueJourney(); }, 5000);
+            setTimeout(function() {  continueJourney(); }, 3000);
         }
     }
 
@@ -334,7 +342,7 @@ function confirmAction(){
 function declineAction(){
     setText('You decide to leave and continue on your journey.')
     actionsDiv.innerHTML = ''
-    setTimeout(function() {  continueJourney(); }, 5000);
+    setTimeout(function() {  continueJourney(); }, 3000);
 }
     
 function renderUserData(){
@@ -369,9 +377,17 @@ function showSave(){
 
 function userDied(){
     setText('You have died...');
+    setImage('/images/final.jpg')
     renderUserData();
     saveDiv.innerHTML = '';
     deleteGame();
+    actionsDiv.innerHTML = '';
+    let retry = document.createElement('a')
+    retry.setAttribute('href', 'index.html')
+    let button = document.createElement('button')
+    button.innerText = 'New Adventure';
+    retry.appendChild(button);
+    actionsDiv.appendChild(retry);
 }
 
 async function saveGame(){
@@ -387,7 +403,15 @@ async function saveGame(){
             'Content-Type': 'application/json'
         }
     }).then(res => res.json())
-    .then(data => console.log(data))
+    .then(data => {
+        let saveMessage = document.createElement('p')
+        if(data.msg === 'Save Complete'){
+            saveMessage.innerText = 'Save Successful';
+        } else {
+            saveMessage.innerText = 'Error Saving';
+        }
+        saveDiv.appendChild(saveMessage);})
+        setTimeout(function() {  showSave(); }, 3000);
 }
 
 async function getGame(){
